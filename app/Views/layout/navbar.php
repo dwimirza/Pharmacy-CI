@@ -1,0 +1,29 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm fixed-top">
+    <div class="container">
+        <a class="navbar-brand fs-4" href="/">
+            <i class="fas fa-clinic-medical text-primary me-2"></i> Mecura
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+            <ul class="navbar-nav gap-4">
+                <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/products">Products</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Categories</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Offers</a></li>
+            </ul>
+        </div>
+        <div class="d-flex gap-3 align-items-center">
+            <a href="#" class="text-dark"><i class="fas fa-search fs-5"></i></a>
+            <a href="#" class="text-dark position-relative">
+                <i class="fas fa-shopping-cart fs-5"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+                    2
+                </span>
+            </a>
+            <a href="#" class="btn btn-sm btn-outline-primary rounded-pill px-3 ms-2">Login</a>
+        </div>
+    </div>
+</nav>
+<div style="height: 80px;"></div>
