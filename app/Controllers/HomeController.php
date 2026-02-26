@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
+use App\Models\MedicineModel;
 
 class HomeController extends BaseController
 {
@@ -14,6 +15,12 @@ class HomeController extends BaseController
 
     public function products()
     {
-         return view('product/index');
+        $medicineModel = new MedicineModel();
+        
+        $data = [
+            'medicines' => $medicineModel->findAll() 
+        ];
+
+        return view('product/index', $data);
     }
 }
