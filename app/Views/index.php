@@ -42,17 +42,22 @@ Home
     <section class="mb-5 text-center">
         <h3 class="section-title">Our Popular Categories</h3>
         <div class="row justify-content-center g-4">
-            <?php $cats = ['Vitamins', 'Skin Care', 'First Aid', 'Baby Care', 'Wellness', 'Devices']; ?>
-            <?php foreach($cats as $cat): ?>
-            <div class="col-6 col-md-2">
-                <a href="#" class="text-decoration-none text-dark">
-                    <div class="category-circle">
-                        <i class="fas fa-pills fa-2x text-primary"></i>
-                    </div>
-                    <h6 class="fw-bold mt-3"><?= $cat ?></h6>
-                </a>
-            </div>
+             <?php if (!empty($categories)): ?>
+            <?php foreach ($categories as $cat): ?>
+                <div class="col-6 col-md-2">
+                    <a href="#" class="text-decoration-none text-dark">
+                        <div class="category-circle">
+                            <i class="fas fa-pills fa-2x text-primary"></i>
+                        </div>
+                        <h6 class="fw-bold mt-3">
+                            <?= esc($cat['name']) ?>
+                        </h6>
+                    </a>
+                </div>
             <?php endforeach; ?>
+        <?php else: ?>
+            <p class="text-muted">No categories available.</p>
+        <?php endif; ?>
         </div>
     </section>
 
@@ -63,14 +68,15 @@ Home
         </div>
 
         <div class="row g-4">
-            <?php for($i=1; $i<=4; $i++): ?>
+            <?php if (!empty($products)): ?>
+                <?php foreach ($products as $product): ?>
             <div class="col-md-3 col-6">
                 <div class="card card-shadow rounded-xl h-100">
                     <div class="card-body p-4 text-center position-relative">
                         <button class="btn btn-sm position-absolute top-0 end-0 mt-2 me-2 text-danger"><i class="far fa-heart"></i></button>
-                        <img src="https://placehold.co/150x150/png?text=Product-<?= $i ?>" class="img-fluid mb-3 rounded" alt="Product">
-                        <p class="text-muted small mb-1 text-start">Nature's Bounty</p>
-                        <h6 class="fw-bold text-start">Vitamin C + Zinc Immune Support</h6>
+                        <img src="https://placehold.co/150x150/png?text=Product-" class="img-fluid mb-3 rounded" alt="Product">
+                        <p class="text-muted small mb-1 text-start"><?= esc($product['category_name']) ?></p>
+                        <h6 class="fw-bold text-start"><?= esc($product['name']) ?></h6>
                         <div class="d-flex justify-content-between align-items-center mt-3">
                             <h5 class="fw-bold mb-0">$12.50</h5>
                             <button class="btn btn-primary-soft rounded-pill px-3 btn-sm"><i class="fas fa-cart-plus me-1"></i> Add</button>
@@ -78,7 +84,10 @@ Home
                     </div>
                 </div>
             </div>
-            <?php endfor; ?>
+            <?php endforeach; ?>
+            <?php else: ?>
+                <p class="text-muted">No products available.</p>
+            <?php endif; ?>
         </div>
     </section>
     

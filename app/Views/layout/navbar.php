@@ -23,7 +23,7 @@
             
             <div class="dropdown ms-2">
                 <button class="btn btn-sm btn-primary rounded-pill px-3 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-user-circle me-1"></i> Admin
+                    <i class="fas fa-user-circle me-1"></i> <?= esc(session()->get('name')) ?> 
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2 rounded-3">
                     <li><a class="dropdown-item" href="/admin/medicines"><i class="fas fa-pills me-2 text-primary"></i> Manage Medicines</a></li>

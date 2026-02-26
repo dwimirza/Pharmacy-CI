@@ -4,15 +4,21 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class CategoryModel extends Model
+class OrdersModel extends Model
 {
-    protected $table            = 'categories';
+    protected $table            = 'orders';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['name', 'slug'];
+    protected $allowedFields    = [
+        'user_id',
+        'total_amount',
+        'status',
+        'created_at',
+        'updated_at',
+    ];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -43,9 +49,8 @@ class CategoryModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
-    public function getCategories()
+    public function getOrdersByUserId($userId)
     {
-        return $this->findAll();
+        return $this->where('user_id', $userId)->findAll();
     }
 }

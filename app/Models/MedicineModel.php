@@ -44,4 +44,9 @@ class MedicineModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getMedicines()
+    {
+        return $this->findAll();
+    }
 }

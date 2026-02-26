@@ -9,6 +9,11 @@ $routes->get('/', 'HomeController::index');
 
 $routes->get('/products', 'HomeController::products');
 
+$routes->get('/register', 'Auth::register');
+$routes->get('/login', 'Auth::login');
+$routes->post('/auth/login', 'Auth::process');
+$routes->post('/auth/register', 'Auth::processRegister');
+
 $routes->get('/admin/medicines', 'AdminController::medicines');
 $routes->post('/admin/medicines/store', 'AdminController::storeMedicine');
 $routes->get('/admin/medicines/edit/(:num)', 'AdminController::edit/$1');
