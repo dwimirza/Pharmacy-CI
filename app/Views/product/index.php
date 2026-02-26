@@ -29,6 +29,7 @@ All Products
                 <?php else: ?>
                 <p class="text-muted">No categories available.</p>
                 <?php endif; ?>
+                
                 <h5 class="fw-bold mb-3 mt-4">Price Range</h5>
                 <input type="range" class="form-range mb-2" id="priceRange">
                 <div class="d-flex justify-content-between text-muted small">
@@ -55,39 +56,52 @@ All Products
                 <div class="col-lg-4 col-sm-6">
                     <div class="card card-shadow rounded-xl h-100 border-0 transition-hover">
                         <div class="card-body p-4 text-center position-relative">
-                            <button
-                                class="btn btn-sm position-absolute top-0 end-0 mt-2 me-2 text-danger border-0 bg-transparent">
+                            
+                            <button class="btn btn-sm position-absolute top-0 end-0 mt-2 me-2 text-danger border-0 bg-transparent">
                                 <i class="far fa-heart fs-5"></i>
                             </button>
 
-                            <img src="<?= esc($product['image_url'] ?? 'https://placehold.co/150x150/png?text=Medicine') ?>"
-                                class="img-fluid mb-3 rounded" alt="<?= esc($product['name']) ?>">
+                            <a href="/product/<?= $product['id']; ?>" class="d-block">
+                                <?php if(!empty($product['image_url'])): ?>
+                                    <img src="/uploads/medicines/<?= esc($product['image_url']) ?>" class="img-fluid mb-3 rounded" alt="<?= esc($product['name']) ?>" style="height: 180px; width: 100%; object-fit: cover;">
+                                <?php else: ?>
+                                    <img src="https://placehold.co/300x300/e9ecef/adb5bd?text=No+Image" class="img-fluid mb-3 rounded" alt="<?= esc($product['name']) ?>" style="height: 180px; width: 100%; object-fit: cover;">
+                                <?php endif; ?>
+                            </a>
 
                             <p class="text-muted small mb-1 text-start">
                                 <?= esc($product['category_name'] ?? 'Uncategorized') ?>
                             </p>
 
                             <h6 class="fw-bold text-start text-truncate">
-                                <?= esc($product['name']) ?>
+                                <a href="/product/<?= $product['id']; ?>" class="text-decoration-none text-dark hover-primary">
+                                    <?= esc($product['name']) ?>
+                                </a>
                             </h6>
 
                             <div class="d-flex justify-content-between align-items-center mt-3">
                                 <h5 class="fw-bold mb-0" style="color: var(--primary-color);">
                                     Rp <?= number_format($product['price'], 0, ',', '.') ?>
                                 </h5>
-                                <button class="btn btn-primary-soft rounded-pill px-3 btn-sm">
-                                    <i class="fas fa-cart-plus"></i>
-                                </button>
-                            </div>
+                                
+                                <form action="/cart/add" method="post" class="m-0">
+                                    <input type="hidden" name="id" value="<?= $product['id']; ?>">
+                                    <input type="hidden" name="qty" value="1">
+                                    <button type="submit" class="btn btn-primary-soft rounded-pill px-3 btn-sm" <?= $product['stock'] < 1 ? 'disabled' : ''; ?> title="Add to Cart">
+                                        <i class="fas fa-cart-plus"></i>
+                                    </button>
+                                </form>
+                                </div>
                         </div>
                     </div>
                 </div>
                 <?php endforeach; ?>
                 <?php else: ?>
-                <p class="text-muted">No products available.</p>
+                <div class="col-12 text-center py-5">
+                    <p class="text-muted">No products available at the moment.</p>
+                </div>
                 <?php endif; ?>
             </div>
-
 
         </div>
     </div>
