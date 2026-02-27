@@ -30,6 +30,27 @@ class AdminController extends BaseController
     public function storeMedicine()
     {
         $medicineModel = new MedicineModel();
+        $fileImage = $this->request->getFile('image_url');
+        $imageName = null;
+        if ($fileImage && $fileImage->isValid() && ! $fileImage->hasMoved()) {
+            $rules = [
+                'image_url' => [
+                    'rules'  => 'is_image[image_url]|mime_in[image_url,image/jpg,image/jpeg,image/png,image/webp]|max_size[image_url,2048]',
+                    'errors' => [
+                        'is_image' => 'File must be an image.',
+                        'mime_in'  => 'Invalid image format. Use JPG, PNG, or WEBP.',
+                        'max_size' => 'Image size cannot exceed 2MB.'
+                    ]
+                ]
+            ];
+            
+            if (!$this->validate($rules)) {
+                return redirect()->to('/admin/medicines')->with('error', $this->validator->getError('image_url'));
+            }
+
+            $imageName = $fileImage->getRandomName();
+            $fileImage->move('uploads/medicines', $imageName);
+        }
         
         $medicineModel->save([
             'name'                  => $this->request->getPost('name'),
