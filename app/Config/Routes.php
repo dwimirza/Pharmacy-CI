@@ -28,6 +28,10 @@ $routes->group('', ['filter' => 'auth'], function($routes) {
     $routes->post('/admin/categories/delete/(:num)', 'AdminController::deleteCategory/$1');
 });
 
+$routes->group('api', function($routes) {
+    $routes->resource('medicines', ['controller' => 'Api\Medicines']);
+});
+
 $routes->get('/cart', 'Cart::index');
 $routes->post('/cart/add', 'Cart::add');
 $routes->post('/cart/update', 'Cart::update');
