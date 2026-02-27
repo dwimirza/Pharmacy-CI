@@ -20,35 +20,60 @@ All Products
             <div class="card card-shadow rounded-xl p-4 border-0">
                 <h5 class="fw-bold mb-3">Categories</h5>
                 <ul class="list-unstyled mb-4">
-                    <?php if (!empty($categories)): ?>
-                    <?php foreach ($categories as $cat): ?>
-                    <li class="mb-2"><a href="#"
-                            class="text-decoration-none text-muted hover-primary"><?= esc($cat['name']) ?></a></li>
-                    <?php endforeach; ?>
-                </ul>
-                <?php else: ?>
-                <p class="text-muted">No categories available.</p>
-                <?php endif; ?>
+                    
+                    <li class="mb-2">
+                        <a href="/products" class="text-decoration-none <?= empty($active_category) ? 'fw-bold text-primary' : 'text-muted hover-primary' ?>">
+                            <i class="fas fa-th-large me-2"></i> All Medicines
+                        </a>
+                    </li>
 
-                <h5 class="fw-bold mb-3 mt-4">Price Range</h5>
-                <input type="range" class="form-range mb-2" id="priceRange">
-                <div class="d-flex justify-content-between text-muted small">
-                    <span>Rp 0</span>
-                    <span>Rp 500.000+</span>
-                </div>
+                    <?php if (!empty($categories)): ?>
+                        <?php foreach ($categories as $cat): ?>
+                        <li class="mb-2">
+                            <a href="/products?category=<?= $cat['id']; ?>"
+                               class="text-decoration-none <?= ($active_category == $cat['id']) ? 'fw-bold text-primary' : 'text-muted hover-primary' ?>">
+                               <i class="fas fa-caret-right me-1 <?= ($active_category == $cat['id']) ? '' : 'text-transparent' ?>"></i> <?= esc($cat['name']) ?>
+                            </a>
+                        </li>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <li class="text-muted small">No categories available.</li>
+                    <?php endif; ?> 
+                </ul>
             </div>
         </div>
 
         <div class="col-lg-9 col-md-8">
-
+        
+        <?php 
+                $judulKategori = 'All Medicines';
+                
+                if (!empty($active_category) && !empty($categories)) {
+                    foreach ($categories as $cat) {
+                        if ($cat['id'] == $active_category) {
+                            $judulKategori = $cat['name'];
+                            break;
+                        }
+                    }
+                }
+            ?>
+            
             <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
-                <h3 class="section-title mb-0">All Medicines</h3>
-                <select class="form-select w-auto rounded-pill border-0 shadow-sm mt-3 mt-md-0">
-                    <option>Sort by: Popularity</option>
-                    <option>Price: Low to High</option>
-                    <option>Price: High to Low</option>
-                </select>
-            </div>
+                <h3 class="section-title mb-0"><?= esc($judulKategori); ?></h3>
+                
+                <form action="" method="get" class="m-0">
+                    
+                    <?php if (!empty($active_category)): ?>
+                        <input type="hidden" name="category" value="<?= esc($active_category); ?>">
+                    <?php endif; ?>
+                    
+                    <select name="sort" class="form-select w-auto rounded-pill border-0 shadow-sm mt-3 mt-md-0" onchange="this.form.submit()">
+                        <option value="">Sort by: Latest</option>
+                        <option value="price_asc" <?= (isset($active_sort) && $active_sort == 'price_asc') ? 'selected' : ''; ?>>Price: Low to High</option>
+                        <option value="price_desc" <?= (isset($active_sort) && $active_sort == 'price_desc') ? 'selected' : ''; ?>>Price: High to Low</option>
+                    </select>
+                </form>
+                </div>
 
             <div class="row g-4">
                 <?php if (!empty($products)): ?>

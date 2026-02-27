@@ -10,7 +10,8 @@
             <ul class="navbar-nav gap-4">
                 <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="/products">Products</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Categories</a></li>
+                <li class="nav-item"><a class="nav-link" href="/categories">Categories</a></li>
+                
             </ul>
         </div>
         <div class="d-flex gap-3 align-items-center">
@@ -45,7 +46,7 @@
                             <li><hr class="dropdown-divider"></li>
                         <?php endif; ?>
                         
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-history me-2 text-secondary"></i> My Orders</a></li>
+                        <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-history me-2 text-secondary"></i> My Orders</a></li>
                         <li><a class="dropdown-item text-danger" href="/logout"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
                     </ul>
                 </div>

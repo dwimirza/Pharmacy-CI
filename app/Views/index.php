@@ -127,14 +127,14 @@
                 <div class="p-5 rounded-xl shadow-sm d-flex flex-column justify-content-center align-items-start h-100" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); min-height: 200px;">
                     <h4 class="fw-bold text-dark">Headache & Migraine Solutions</h4>
                     <p class="text-muted mb-4 text-start">Quick relief for your daily activities.</p>
-                    <a href="/products" class="btn btn-light text-primary fw-bold rounded-pill px-4 shadow-sm">Shop Relief</a>
+                    <a href="products?category=1" class="btn btn-light text-primary fw-bold rounded-pill px-4 shadow-sm">Shop Relief</a>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="p-5 rounded-xl shadow-sm d-flex flex-column justify-content-center align-items-start h-100" style="background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%); min-height: 200px;">
                     <h4 class="fw-bold text-dark">Skin Health & Glow Essentials</h4>
                     <p class="text-muted mb-4 text-start">Vitamins for a healthier, glowing skin.</p>
-                    <a href="/products" class="btn btn-light text-danger fw-bold rounded-pill px-4 shadow-sm">Shop Vitamins</a>
+                    <a href="products?category=3" class="btn btn-light text-danger fw-bold rounded-pill px-4 shadow-sm">Shop Vitamins</a>
                 </div>
             </div>
         </div>

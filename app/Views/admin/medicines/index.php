@@ -22,9 +22,17 @@
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold" style="color: var(--primary-color);">Manage Medicines</h2>
-            <p class="text-muted">Manage inventory, pricing, and pharmacy product information.</p>
+            <h2 class="fw-bold" style="color: var(--primary-color);">Pharmacy Inventory</h2>
+            <ul class="nav nav-pills mt-2">
+                <li class="nav-item">
+                    <a class="nav-link active rounded-pill px-4 shadow-sm" href="/admin/medicines" style="background-color: var(--primary-color);">Medicines</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark bg-white border rounded-pill px-4 ms-2 hover-primary" href="/admin/categories">Categories</a>
+                </li>
+            </ul>
         </div>
+        
         <button type="button" class="btn btn-primary rounded-pill px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#addMedicineModal">
             <i class="fas fa-plus me-2"></i> Add Medicine
         </button>

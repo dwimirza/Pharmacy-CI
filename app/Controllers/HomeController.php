@@ -14,14 +14,14 @@ class HomeController extends BaseController
         $categoryModel = new CategoryModel();
         $data['categories'] = $categoryModel->getCategories();
 
-        $categories = $categoryModel->findAll(6);
+        $categories = $categoryModel->findAll(4);
 
         $medicineModel = new MedicineModel();
         $data['products'] = $medicineModel
         ->select('medicines.*, categories.name as category_name')
         ->join('categories', 'categories.id = medicines.category_id', 'left')
         ->orderBy('medicines.id', 'DESC')
-        ->findAll(4); // <- pakai findAll(limit)
+        ->findAll(4);
 
         $data = [
             'title'      => 'Home', 
@@ -36,18 +36,34 @@ class HomeController extends BaseController
     {
         $medicineModel = new MedicineModel();
         
-         $data['products'] = $medicineModel
-        ->select('medicines.*, categories.name AS category_name')
-        ->join('categories', 'categories.id = medicines.category_id', 'left')
-        ->orderBy('medicines.id', 'DESC')
-        ->paginate(9, 'products');
+        $categoryId = $this->request->getGet('category');
+        $sort       = $this->request->getGet('sort'); 
 
-        $data['pager']      = $medicineModel->pager;
+        $medicineModel->select('medicines.*, categories.name AS category_name')
+                      ->join('categories', 'categories.id = medicines.category_id', 'left');
+        
+        if ($categoryId) {
+            $medicineModel->where('medicines.category_id', $categoryId);
+        }
+        
+        if ($sort == 'price_asc') {
+            $medicineModel->orderBy('medicines.price', 'ASC');
+        } elseif ($sort == 'price_desc') {
+            $medicineModel->orderBy('medicines.price', 'DESC'); 
+        } else {
+            $medicineModel->orderBy('medicines.id', 'DESC'); 
+        }
+
+        $data['products'] = $medicineModel->paginate(50, 'products');
+        $data['pager']    = $medicineModel->pager;
     
         $categoryModel = new CategoryModel();
         $data['categories'] = $categoryModel->getCategories();
+        
+        $data['active_category'] = $categoryId;
+        $data['active_sort']     = $sort; 
 
-        return view('product/index', $data);
+        return view('product/products', $data);
     }
 
     public function productDetail($id)
@@ -71,5 +87,17 @@ class HomeController extends BaseController
         ];
 
         return view('product/detail', $data);
+    }
+
+    public function categories()
+    {
+        $categoryModel = new \App\Models\CategoryModel();
+        
+        $data = [
+            'title'      => 'All Categories',
+            'categories' => $categoryModel->findAll()
+        ];
+
+        return view('product/categories', $data);
     }
 }

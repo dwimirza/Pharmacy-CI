@@ -16,6 +16,8 @@ class OrdersModel extends Model
         'user_id',
         'total_amount',
         'status',
+        'shipping_address', 
+        'payment_method',   
         'created_at',
         'updated_at',
     ];

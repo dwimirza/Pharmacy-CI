@@ -14,21 +14,28 @@ class Checkout extends BaseController
 {
     public function store()
     {
-        $db              = \Config\Database::connect();
-        $cartModel       = new CartModel();
-        $medicineModel   = new MedicineModel();
-        $orderModel      = new OrdersModel();
-        $orderDetailModel= new OrderDetailsModel();
+        // Tolak jika belum login
+        if (!session()->get('logged_in')) {
+            return redirect()->to('/login');
+        }
+
+        $db               = \Config\Database::connect();
+        $cartModel        = new CartModel();
+        $medicineModel    = new MedicineModel();
+        $orderModel       = new OrdersModel();
+        $orderDetailModel = new OrderDetailsModel();
 
         $userId = session('user_id');
 
+        // Tangkap data tambahan dari form modal Checkout
+        $address       = $this->request->getPost('address');
+        $paymentMethod = $this->request->getPost('payment_method');
+
         // 1. Ambil semua item cart user
-        $cartItems = $cartModel
-            ->where('user_id', $userId)
-            ->findAll();
+        $cartItems = $cartModel->where('user_id', $userId)->findAll();
 
         if (empty($cartItems)) {
-            return redirect()->back()->with('error', 'Cart kosong.');
+            return redirect()->back()->with('error', 'Your cart is empty.');
         }
 
         $db->transBegin();
@@ -37,32 +44,47 @@ class Checkout extends BaseController
             $total = 0;
             $detailsData = [];
 
-            // 2. Hitung total dan siapkan data detail
+            // 2. Hitung total, siapkan detail, dan KURANGI STOK
             foreach ($cartItems as $item) {
                 $medicine = $medicineModel->find($item['medicine_id']);
-                if (! $medicine) {
+                
+                if (!$medicine) {
                     throw new DatabaseException('Produk tidak ditemukan.');
                 }
 
-                $price    = $medicine['price'];
-                $subtotal = $price * $item['quantity'];
-                $total   += $subtotal;
+                // Pengamanan Ekstra: Cek apakah stok mencukupi
+                if ($medicine['stock'] < $item['quantity']) {
+                    throw new DatabaseException('Stok untuk obat ' . $medicine['name'] . ' tidak mencukupi.');
+                }
 
+                $price     = $medicine['price'];
+                $subtotal  = $price * $item['quantity'];
+                $total    += $subtotal;
+
+                // Siapkan data untuk tabel order_details
                 $detailsData[] = [
                     'medicine_id' => $item['medicine_id'],
                     'quantity'    => $item['quantity'],
                     'price'       => $price,
                 ];
+
+                // Proses Kurangi Stok
+                $newStock = $medicine['stock'] - $item['quantity'];
+                $medicineModel->update($item['medicine_id'], ['stock' => $newStock]);
             }
 
-            // 3. Insert ke orders
-            $orderId = $orderModel->insert([
-                'user_id'      => $userId,
-                'total_amount' => $total,
-                'status'       => 'completed',
-                'created_at'   => date('Y-m-d H:i:s'),
-                'updated_at'   => date('Y-m-d H:i:s'),
-            ], true); // true supaya dapat insertID
+            // 3. Insert ke tabel orders (Masukan Address & Payment Method)
+            $orderModel->insert([
+                'user_id'          => $userId,
+                'total_amount'     => $total,
+                'status'           => 'completed', // Ubah jadi pending menunggu konfirmasi admin
+                'shipping_address' => $address,
+                'payment_method'   => $paymentMethod,
+                'created_at'       => date('Y-m-d H:i:s'),
+                'updated_at'       => date('Y-m-d H:i:s'),
+            ]); 
+            
+            $orderId = $orderModel->getInsertID();
 
             // 4. Insert ke order_details
             foreach ($detailsData as $row) {
@@ -75,15 +97,11 @@ class Checkout extends BaseController
 
             $db->transCommit();
 
-            return redirect()
-                ->to('cart')
-                ->with('success', 'Order berhasil dibuat.');
+            return redirect()->to('/products')->with('success', 'Checkout successful! Stock has been updated and your order is saved.');
 
         } catch (\Throwable $e) {
             $db->transRollback();
-            return redirect()
-                ->back()
-                ->with('error', 'Gagal membuat order: '.$e->getMessage());
+            return redirect()->back()->with('error', 'Checkout failed: ' . $e->getMessage());
         }
     }
 }

@@ -42,10 +42,38 @@ class AdminController extends BaseController
             'price'                 => $this->request->getPost('price'),
             'stock'                 => $this->request->getPost('stock'),
             'status'                => $this->request->getPost('status'),
-            'image_url'             => null 
+            'image_url'             => $imageName
         ]);
 
         return redirect()->to('/admin/medicines')->with('success', 'New medicine added successfully.');
+    }
+
+    public function categories()
+    {
+        $categoryModel = new \App\Models\CategoryModel();
+        
+        $data = [
+            'title'      => 'Manage Categories',
+            'categories' => $categoryModel->findAll()
+        ];
+
+        return view('admin/categories/index', $data);
+    }
+
+    public function storeCategory()
+    {
+        $categoryModel = new \App\Models\CategoryModel();
+        
+        $name = $this->request->getPost('name');
+        
+        $slug = url_title($name, '-', true); 
+
+        $categoryModel->save([
+            'name' => $name,
+            'slug' => $slug
+        ]);
+
+        return redirect()->to('/admin/categories')->with('success', 'Category added successfully.');
     }
 
     public function update($id)
@@ -125,5 +153,20 @@ class AdminController extends BaseController
         }
 
         return redirect()->to('/admin/medicines')->with('error', 'Medicine not found.');
+    }
+
+    public function deleteCategory($id)
+    {
+        $categoryModel = new \App\Models\CategoryModel();
+        
+        $medicineModel = new \App\Models\MedicineModel();
+        $isUsed = $medicineModel->where('category_id', $id)->first();
+        
+        if ($isUsed) {
+            return redirect()->to('/admin/categories')->with('error', 'Cannot delete! This category is currently being used by some medicines.');
+        }
+
+        $categoryModel->delete($id);
+        return redirect()->to('/admin/categories')->with('success', 'Category deleted successfully.');
     }
 }

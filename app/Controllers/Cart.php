@@ -114,4 +114,45 @@ class Cart extends BaseController
 
         return redirect()->to('/cart')->with('success', 'Product removed from cart.');
     }
+
+    public function checkout()
+    {
+        if (!session()->get('logged_in')) {
+            return redirect()->to('/login');
+        }
+
+        $userId = session()->get('user_id');
+        $cartModel = new CartModel();
+        $medicineModel = new MedicineModel();
+
+        $cartItems = $cartModel->where('user_id', $userId)->findAll();
+
+        if (empty($cartItems)) {
+            return redirect()->to('/cart')->with('error', 'Your cart is empty.');
+        }
+
+        // 2. Loop semua barang untuk MENGURANGI STOK di database obat
+        foreach ($cartItems as $item) {
+            $medicine = $medicineModel->find($item['medicine_id']);
+            
+            if ($medicine) {
+                // Matematika pengurangan stok
+                $newStock = $medicine['stock'] - $item['quantity'];
+                if ($newStock < 0) $newStock = 0; // Cegah stok minus jika ada error
+                
+                // Update ke database
+                $medicineModel->update($item['medicine_id'], ['stock' => $newStock]);
+            }
+        }
+
+        // 3. Tangkap data metode pembayaran dan alamat dari Modal (bisa kamu gunakan nanti)
+        $address = $this->request->getPost('address');
+        $paymentMethod = $this->request->getPost('payment_method');
+
+        // 4. Kosongkan keranjang user karena barang sudah dibeli
+        $cartModel->where('user_id', $userId)->delete();
+
+        // 5. Kembali ke halaman Produk dengan notifikasi sukses
+        return redirect()->to('/products')->with('success', 'Payment successful! Thank you for your order.');
+    }
 }
