@@ -11,7 +11,6 @@
                 <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="/products">Products</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Categories</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Offers</a></li>
             </ul>
         </div>
         <div class="d-flex gap-3 align-items-center">

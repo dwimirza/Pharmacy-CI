@@ -1,7 +1,7 @@
 <?= $this->extend('layout/template'); ?>
 
 <?= $this->section('title'); ?>
-Create Account - Mecura
+Login - Mecura
 <?= $this->endSection(); ?>
 
 <?= $this->section('content'); ?>
@@ -35,7 +35,7 @@ Create Account - Mecura
 
                 
                 <button type="submit" class="btn btn-primary w-100 py-3 fw-bold rounded-pill shadow-sm mb-4">
-                    Create Account
+                    Login
                 </button>
 
                 <div class="text-center">

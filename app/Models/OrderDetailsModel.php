@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class OrderDetailsModel extends Model
 {
-    protected $table            = 'orderdetails';
+    protected $table            = 'order_details';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
@@ -17,8 +17,6 @@ class OrderDetailsModel extends Model
         'medicine_id',
         'quantity',
         'price',
-        'created_at',
-        'updated_at',
     ];
 
     protected bool $allowEmptyInserts = false;
