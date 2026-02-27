@@ -6,7 +6,6 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 $routes->get('/', 'HomeController::index');
-
 $routes->get('/products', 'HomeController::products');
 $routes->get('/product/(:num)', 'HomeController::productDetail/$1');
 $routes->get('/categories', 'HomeController::categories');
@@ -16,6 +15,13 @@ $routes->get('/login', 'Auth::login');
 $routes->post('/auth/login', 'Auth::process');
 $routes->post('/auth/register', 'Auth::processRegister');
 $routes->get('/logout', 'Auth::logout');
+
+$routes->get('/cart', 'Cart::index');
+$routes->post('/cart/add', 'Cart::add');
+$routes->post('/cart/update', 'Cart::update');
+$routes->get('/cart/remove/(:num)', 'Cart::remove/$1');
+$routes->post('/checkout', 'Checkout::store');
+$routes->get('/my-orders', 'Order::index');
 
 $routes->group('', ['filter' => 'auth'], function($routes) {
     $routes->get('/admin/medicines', 'AdminController::medicines');
@@ -31,11 +37,3 @@ $routes->group('', ['filter' => 'auth'], function($routes) {
 $routes->group('api', function($routes) {
     $routes->resource('medicines', ['controller' => 'Api\Medicines']);
 });
-
-$routes->get('/cart', 'Cart::index');
-$routes->post('/cart/add', 'Cart::add');
-$routes->post('/cart/update', 'Cart::update');
-$routes->get('/cart/remove/(:num)', 'Cart::remove/$1');
-$routes->post('/checkout', 'Checkout::store');
-
-$routes->get('/my-orders', 'Order::index');
