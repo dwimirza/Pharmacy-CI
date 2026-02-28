@@ -9,6 +9,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        #main-navbar {
+            transition: top 0.3s ease-in-out;
+            top: 0; 
+        }
+
+        .navbar-hidden {
+            top: -90px !important; /* Geser navbar ke atas layar (sesuaikan angkanya jika navbar-mu lebih tinggi) */
+        }
+
         :root {
             --primary-color: #6f42c1; /* Purple from moodboard */
             --secondary-color: #f8f9fa;
@@ -46,7 +55,25 @@
 
     <?= $this->include('layout/footer'); ?>
 
+    <script>
+        let lastScrollTop = 0;
+        const navbar = document.getElementById('main-navbar');
 
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop) {
+                // Jika scroll ke bawah, sembunyikan navbar
+                navbar.classList.add('navbar-hidden');
+            } else {
+                // Jika scroll ke atas, tampilkan navbar kembali
+                navbar.classList.remove('navbar-hidden');
+            }
+            
+            // Simpan posisi scroll terakhir
+            lastScrollTop = scrollTop;
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <?= $this->renderSection('extra-js') ?>

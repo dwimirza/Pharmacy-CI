@@ -14,7 +14,6 @@ class Checkout extends BaseController
 {
     public function store()
     {
-        // Tolak jika belum login
         if (!session()->get('logged_in')) {
             return redirect()->to('/login');
         }
@@ -27,11 +26,9 @@ class Checkout extends BaseController
 
         $userId = session('user_id');
 
-        // Tangkap data tambahan dari form modal Checkout
         $address       = $this->request->getPost('address');
         $paymentMethod = $this->request->getPost('payment_method');
 
-        // 1. Ambil semua item cart user
         $cartItems = $cartModel->where('user_id', $userId)->findAll();
 
         if (empty($cartItems)) {
@@ -44,7 +41,6 @@ class Checkout extends BaseController
             $total = 0;
             $detailsData = [];
 
-            // 2. Hitung total, siapkan detail, dan KURANGI STOK
             foreach ($cartItems as $item) {
                 $medicine = $medicineModel->find($item['medicine_id']);
                 
@@ -52,7 +48,6 @@ class Checkout extends BaseController
                     throw new DatabaseException('Produk tidak ditemukan.');
                 }
 
-                // Pengamanan Ekstra: Cek apakah stok mencukupi
                 if ($medicine['stock'] < $item['quantity']) {
                     throw new DatabaseException('Stok untuk obat ' . $medicine['name'] . ' tidak mencukupi.');
                 }
@@ -61,23 +56,20 @@ class Checkout extends BaseController
                 $subtotal  = $price * $item['quantity'];
                 $total    += $subtotal;
 
-                // Siapkan data untuk tabel order_details
                 $detailsData[] = [
                     'medicine_id' => $item['medicine_id'],
                     'quantity'    => $item['quantity'],
                     'price'       => $price,
                 ];
 
-                // Proses Kurangi Stok
                 $newStock = $medicine['stock'] - $item['quantity'];
                 $medicineModel->update($item['medicine_id'], ['stock' => $newStock]);
             }
 
-            // 3. Insert ke tabel orders (Masukan Address & Payment Method)
             $orderModel->insert([
                 'user_id'          => $userId,
                 'total_amount'     => $total,
-                'status'           => 'completed', // Ubah jadi pending menunggu konfirmasi admin
+                'status'           => 'completed',
                 'shipping_address' => $address,
                 'payment_method'   => $paymentMethod,
                 'created_at'       => date('Y-m-d H:i:s'),
@@ -86,13 +78,11 @@ class Checkout extends BaseController
             
             $orderId = $orderModel->getInsertID();
 
-            // 4. Insert ke order_details
             foreach ($detailsData as $row) {
                 $row['order_id'] = $orderId;
                 $orderDetailModel->insert($row);
             }
 
-            // 5. Kosongkan cart user
             $cartModel->where('user_id', $userId)->delete();
 
             $db->transCommit();

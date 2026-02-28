@@ -39,7 +39,7 @@ Login - Mecura
                 </button>
 
                 <div class="text-center">
-                    <p class="text-muted mb-0">Dont have an account? <a href="auth/register" class="text-decoration-none fw-bold" style="color: var(--primary-color);">Register</a></p>
+                    <p class="text-muted mb-0">Dont have an account? <a href="/register" class="text-decoration-none fw-bold" style="color: var(--primary-color);">Register</a></p>
                 </div>
             </form>
         </div>

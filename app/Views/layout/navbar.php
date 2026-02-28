@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm fixed-top">
+<nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm fixed-top">
     <div class="container">
         <a class="navbar-brand fs-4" href="/">
             <i class="fas fa-clinic-medical text-primary me-2"></i> Mecura
@@ -15,7 +15,6 @@
             </ul>
         </div>
         <div class="d-flex gap-3 align-items-center">
-            <a href="#" class="text-dark"><i class="fas fa-search fs-5"></i></a>
             
             <a href="/cart" class="text-dark position-relative hover-primary">
                 <i class="fas fa-shopping-cart fs-5"></i>

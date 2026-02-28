@@ -11,7 +11,6 @@ class Order extends BaseController
 {
     public function index()
     {
-        // Pastikan user sudah login
         if (!session()->get('logged_in')) {
             return redirect()->to('/login');
         }
@@ -20,12 +19,10 @@ class Order extends BaseController
         $orderDetailModel = new OrderDetailsModel();
         $userId = session('user_id');
 
-        // Ambil semua pesanan user ini, urutkan dari yang terbaru
         $orders = $orderModel->where('user_id', $userId)
                              ->orderBy('created_at', 'DESC')
                              ->findAll();
 
-        // Looping untuk mengambil detail obat di setiap pesanan
         foreach ($orders as &$order) {
             $order['details'] = $orderDetailModel->select('order_details.*, medicines.name, medicines.image_url')
                                                  ->join('medicines', 'medicines.id = order_details.medicine_id', 'left')

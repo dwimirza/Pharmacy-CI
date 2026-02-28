@@ -36,8 +36,8 @@
                 <p class="lead text-muted mb-4">Find medicines, vitamins, and health products from trusted sellers delivered to you safely.</p>
                 <a href="/products" class="btn btn-primary rounded-pill px-4 py-2 me-2 shadow-sm">Shop Now <i class="fas fa-arrow-right ms-2"></i></a>
             </div>
-            <div class="col-md-6 text-end d-none d-md-block">
-                <img src="https://placehold.co/500x350/6f42c1/ffffff?text=Doctor+Image" alt="Pharmacy" class="img-fluid rounded-xl shadow">
+            <div class="col-md-6 text-end d-none d-md-block p-4">
+                <img src="<?= base_url('uploads/doctor/Friendly_and_Professional_Male_Doctor_png_images-PNGLove.com.png') ?>" alt="Pharmacy Doctor" class="img-fluid rounded-xl shadow" style="max-height: 400px; width: auto;">
             </div>
         </div>
     </section>
